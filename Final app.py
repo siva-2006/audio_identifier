@@ -10,13 +10,11 @@ from collections import Counter
 import matplotlib.pyplot as plt
 import re
 
-# Set page layout to wide for dashboard design
 st.set_page_config(
     page_title="EE200 Project Demo",
     layout="wide"
 )
 
-# Dark UI Custom Theme Design Injection
 st.markdown("""
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
@@ -95,19 +93,10 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# =====================================================================
-# TEXT FORMATTING UTILITY FOR CLEAN UI DISPLAY
-# =====================================================================
 def to_display_name(song_id):
-    """Converts file-sanitized underscores back to elegant typography apostrophes."""
     if not song_id or song_id.lower() == "none":
         return song_id
-    # Safely targets specific structural instances (e.g., Don_t -> Don't, It_s -> It's)
     return re.sub(r'(\b\w+)_([tsm]|re|ve|ll|d)\b', r"\1'\2", song_id)
-
-# =====================================================================
-# CORE FINGERPRINTING & MATCHING ENGINE
-# =====================================================================
 
 def get_spectrogram(audio_data, fs, nperseg=1024, noverlap=512):
     f, t, Sxx = signal.spectrogram(audio_data, fs, window='hann', nperseg=nperseg, noverlap=noverlap)
@@ -181,9 +170,6 @@ def reconstruct_song_constellations(database):
             song_peaks[song_name].add((t1 + delta_t, f2))
     return song_peaks
 
-# =====================================================================
-# DATABASE INITIALIZATION
-# =====================================================================
 @st.cache_resource
 def load_cached_database(path):
     if os.path.exists(path):
@@ -194,11 +180,8 @@ def load_cached_database(path):
 database_path = "FINGERPRINTS/song_database.pkl"
 database, db_loaded = load_cached_database(database_path)
 
-# =====================================================================
-# SYSTEM MAIN HEADERS
-# =====================================================================
 st.markdown('<h1 class="course-title">EE200 Signals, Systems and Networks</h1>', unsafe_allow_html=True)
-st.markdown('<p class="demo-subtitle">Project Demo: Robust Audio Fingerprinting System</p>', unsafe_allow_html=True)
+st.markdown('<p class="demo-subtitle">Project Demo | Robust Audio Fingerprinting System</p>', unsafe_allow_html=True)
 st.markdown("""
     <div class="project-description">
         <strong>Project Overview:</strong> This system applies principles of time-frequency analysis to implement an audio identification pipeline. 
@@ -208,12 +191,8 @@ st.markdown("""
     </div>
 """, unsafe_allow_html=True)
 
-# Main Multi-Window Interface Tabs
-window = st.tabs(["📚 Database Tracks Explorer", "🔍 Live Upload & Identification", "🗂️ Automated Batch Mode"])
+window = st.tabs(["| Database Tracks Explorer", "| Live Upload & Identification", "| Automated Batch Mode"])
 
-# =====================================================================
-# WINDOW 1: ALL TRACKS CONSTELLATION GRID EXPLORER
-# =====================================================================
 with window[0]:
     st.markdown("<h3 style='color:#FFF; font-weight:600; margin-bottom:0.2rem;'>Global Database Fingerprint Constellations</h3>", unsafe_allow_html=True)
     st.markdown("<p class='tab-info-text'>This window reconstructs and displays the complete spectral constellation anchor maps stored inside the active fingerprint index. It visualizes the distribution profile for all existing database tracks simultaneously.</p>", unsafe_allow_html=True)
@@ -235,7 +214,6 @@ with window[0]:
                 
                 for idx, track_name in enumerate(row_tracks):
                     with columns[idx]:
-                        # Visual display gets the fixed apostrophe typography
                         st.markdown(f"""
                             <div style='background-color:#1A202C; border:1px solid #2D3748; padding:0.5rem 1rem; border-radius:6px; margin-bottom:0.2rem;'>
                                 <span style='font-size:0.9rem; font-weight:600; color:#00F0FF;'>{to_display_name(track_name)}</span>
@@ -260,9 +238,6 @@ with window[0]:
                         st.pyplot(fig_grid, facecolor='#1A202C')
                         plt.close(fig_grid)
 
-# =====================================================================
-# WINDOW 2: LIVE UPLOAD & 3-STEP IDENTIFICATION PIPELINE
-# =====================================================================
 with window[1]:
     st.markdown("<h3 style='color:#FFF; font-weight:600; margin-bottom:0.2rem;'>Search Query Terminal</h3>", unsafe_allow_html=True)
     st.markdown("<p class='tab-info-text'>Upload a single short unknown audio sample to analyze its distinct signal patterns. The pipeline isolates its time-frequency parameters, overlays its timeline window against the best match, and displays the alignment matrix histogram.</p>", unsafe_allow_html=True)
@@ -280,7 +255,6 @@ with window[1]:
                 if score <= 2:
                     matched_song = "none"
             
-            # Match Results Banner displays polished string formatting
             st.markdown(f"""
                 <div class="match-banner">
                     <span style="font-size:0.85rem; text-transform:uppercase; letter-spacing:0.1rem; color:#90CDF4; font-weight:600;">Match Identified</span>
@@ -289,8 +263,7 @@ with window[1]:
                 </div>
             """, unsafe_allow_html=True)
             
-            # Candidate Rankings Displayed Panel
-            with st.expander("📊 Candidate Standings List"):
+            with st.expander("System Candidate Rankings List"):
                 if candidates:
                     df_cand = pd.DataFrame(candidates, columns=["Track Title", "Hash Intersection Spike"])
                     df_cand["Track Title"] = df_cand["Track Title"].apply(to_display_name)
@@ -298,7 +271,6 @@ with window[1]:
             
             st.markdown("<h3 style='color:#FFF; font-weight:600; margin-top:2rem; margin-bottom:1rem;'>3-Step Diagnostic Pipeline</h3>", unsafe_allow_html=True)
             
-            # --- STEP 1: QUERY CLIP SPECTROGRAM & CONSTELLATION ---
             st.markdown("""
                 <div class="step-card">
                     <div class="step-header">Step 1</div>
@@ -321,7 +293,6 @@ with window[1]:
             st.pyplot(fig_step1, facecolor='#1A202C')
             plt.close(fig_step1)
             
-            # --- STEP 2: FULL SONG RECORD MAP & SEGMENT HIGHLIGHTING ---
             st.markdown("""
                 <div class="step-card">
                     <div class="step-header">Step 2</div>
@@ -354,7 +325,6 @@ with window[1]:
             else:
                 st.info("Time alignment synchronization maps are omitted for unmatched or unidentified signals.")
                 
-            # --- STEP 3: COHERENCE OFFSET HISTOGRAM ---
             st.markdown("""
                 <div class="step-card">
                     <div class="step-header">Step 3</div>
@@ -379,9 +349,6 @@ with window[1]:
             else:
                 st.info("Insufficient intersection scores to compute structural histograms.")
 
-# =====================================================================
-# WINDOW 3: MULTI-FILE BATCH PROCESSING MODE
-# =====================================================================
 with window[2]:
     st.markdown("<h3 style='color:#FFF; font-weight:600; margin-bottom:0.2rem;'>Identify Many Clips at Once</h3>", unsafe_allow_html=True)
     st.markdown("<p class='tab-info-text'>Upload a set of query clips simultaneously. Each is identified against the currently indexed library, and the results are compiled into a standardized <code>results.csv</code> sheet containing the columns <strong>filename</strong> and <strong>prediction</strong>.</p>", unsafe_allow_html=True)
@@ -413,8 +380,6 @@ with window[2]:
                         if score <= 2: 
                             song_pred = "none"
                         
-                        # CRITICAL GUARDRAIL: We append the RAW song_pred (with underscore labels) 
-                        # to results_list so the autograder gets the exact string match it expects!
                         results_list.append([filename, song_pred])
                     except Exception as e:
                         results_list.append([filename, "none"])
@@ -423,21 +388,18 @@ with window[2]:
                 
                 status_text.empty()
                 
-                # The visual UI data frame can display cleaned text representation,
-                # but the CSV file preserves the precise original filename metadata.
                 df = pd.DataFrame(results_list, columns=['filename', 'prediction'])
                 df.to_csv("results.csv", index=False)
                 
-                st.success("🏆 Batch identification execution complete.")
+                st.success("Batch identification execution complete.")
                 
-                # Render a visually clean representation inside the screen view for presentation
                 df_display = df.copy()
                 df_display["prediction"] = df_display["prediction"].apply(to_display_name)
                 st.dataframe(df_display, use_container_width=True, hide_index=True)
                 
                 csv_bytes = df.to_csv(index=False).encode('utf-8')
                 st.download_button(
-                    label="💾 Download results.csv Spreadsheet",
+                    label="Download results.csv Spreadsheet",
                     data=csv_bytes,
                     file_name="results.csv",
                     mime="text/csv"
