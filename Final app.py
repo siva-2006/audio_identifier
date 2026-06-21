@@ -184,10 +184,10 @@ st.markdown('<h1 class="course-title">EE200 Signals, Systems and Networks</h1>',
 st.markdown('<p class="demo-subtitle">Project Demo 🚀 Robust Audio Fingerprinting System</p>', unsafe_allow_html=True)
 st.markdown("""
     <div class="project-description">
-        <strong>Project Overview:</strong> This system applies principles of time-frequency analysis to implement an audio identification pipeline. 
-        Raw acoustic waveforms are converted into 2D short-time spectrogram matrices using a balanced 1024-sample window with a 50% overlap. 
-        A localized maximum filter extracts high-entropy structural peaks to form a unique "constellation map". Nearby peaks are paired into 
-        invariant hashes to robustly match queries against a database by analyzing coherent time alignment offset histograms.
+        <strong>Project Overview:</strong> This project implements an audio identification system similar to Shazam using time-frequency analysis. 
+        The audio signal is first converted into a spectrogram using a 1024-sample window with a 50% overlap. We then apply a local maximum filter 
+        to find the strongest peaks and build a constellation map. By pairing nearby peaks into hashes and matching them against the database, 
+        we can identify songs by looking for a clear peak in the time offset histogram.
     </div>
 """, unsafe_allow_html=True)
 
@@ -195,7 +195,7 @@ window = st.tabs(["📚 Database Tracks Explorer", "🔍 Live Upload & Identific
 
 with window[0]:
     st.markdown("<h3 style='color:#FFF; font-weight:600; margin-bottom:0.2rem;'>Global Database Fingerprint Constellations</h3>", unsafe_allow_html=True)
-    st.markdown("<p class='tab-info-text'>This window reconstructs and displays the complete spectral constellation anchor maps stored inside the active fingerprint index. It visualizes the distribution profile for all existing database tracks simultaneously.</p>", unsafe_allow_html=True)
+    st.markdown("<p class='tab-info-text'>This tab reads our saved fingerprint database and reconstructs the full constellation maps. You can see the distribution of key time-frequency points for all the tracks currently stored in the library.</p>", unsafe_allow_html=True)
     
     if not db_loaded:
         st.error("No database snapshot found. Ensure your database file is uploaded.")
@@ -240,7 +240,7 @@ with window[0]:
 
 with window[1]:
     st.markdown("<h3 style='color:#FFF; font-weight:600; margin-bottom:0.2rem;'>Search Query Terminal</h3>", unsafe_allow_html=True)
-    st.markdown("<p class='tab-info-text'>Upload a single short unknown audio sample to analyze its distinct signal patterns. The pipeline isolates its time-frequency parameters, overlays its timeline window against the best match, and displays the alignment matrix histogram.</p>", unsafe_allow_html=True)
+    st.markdown("<p class='tab-info-text'>Upload an audio clip to find out which song it belongs to. The pipeline extracts the constellation points from the query, finds matches in the database, and visualizes the whole decision process step by step.</p>", unsafe_allow_html=True)
     
     uploaded_file = st.file_uploader("Drop clip file below (.mp3 / .wav)", type=["mp3", "wav"], label_visibility="collapsed")
     
@@ -263,25 +263,24 @@ with window[1]:
                 </div>
             """, unsafe_allow_html=True)
             
-            with st.expander("📊 System Candidate Rankings List"):
+            with st.expander("漏 System Candidate Rankings List"):
                 if candidates:
                     df_cand = pd.DataFrame(candidates, columns=["Track Title", "Hash Intersection Spike"])
                     df_cand["Track Title"] = df_cand["Track Title"].apply(to_display_name)
                     st.dataframe(df_cand, width='stretch', hide_index=True)
             
-            st.markdown("<h3 style='color:#FFF; font-weight:600; margin-top:2rem; margin-bottom:1rem;'>⚡ 3-Step Diagnostic Pipeline</h3>", unsafe_allow_html=True)
+            st.markdown("<h3 style='color:#FFF; font-weight:600; margin-top:2rem; margin-bottom:1rem;'>馃毃 3-Step Diagnostic Pipeline</h3>", unsafe_allow_html=True)
             
             st.markdown("""
                 <div class="step-card">
                     <div class="step-header">Step 1</div>
                     <div class="step-title">Query Clip Feature Extraction</div>
-                    <p style="font-size:0.85rem; color:#A0AEC0; margin:0;">Displays the computed spectrogram and extracted high-entropy maximum peaks (cyan landmarks) from the user's uploaded audio snippet.</p>
+                    <p style="font-size:0.85rem; color:#A0AEC0; margin:0;">Plots the spectrogram of the uploaded clip. The cyan markers indicate the local peak points chosen for the query's constellation map.</p>
                 </div>
             """, unsafe_allow_html=True)
             
             fig_step1, ax_step1 = plt.subplots(figsize=(12, 4), facecolor='#1A202C')
             ax_step1.set_facecolor('#1A202C')
-            
             ax_step1.pcolormesh(t, f, Sxx_db, shading='auto', cmap='inferno')
             
             q_frames = [p[0] for p in peaks]
@@ -298,7 +297,7 @@ with window[1]:
                 <div class="step-card">
                     <div class="step-header">Step 2</div>
                     <div class="step-title">Database Alignment Localization</div>
-                    <p style="font-size:0.85rem; color:#A0AEC0; margin:0;">Displays the complete constellation profile of the matched song retrieved from the database. The <span class='text-cyan'>shaded blue window</span> accurately pinpoints where the query clip sits along the full timeline.</p>
+                    <p style="font-size:0.85rem; color:#A0AEC0; margin:0;">Shows the constellation map of the matched song. The highlighted blue section indicates exactly where our query clip lines up along the timeline of the full track.</p>
                 </div>
             """, unsafe_allow_html=True)
             
@@ -330,7 +329,7 @@ with window[1]:
                 <div class="step-card">
                     <div class="step-header">Step 3</div>
                     <div class="step-title">Time Offset Histogram Decision</div>
-                    <p style="font-size:0.85rem; color:#A0AEC0; margin:0;">Plots the distribution of the structural hash differences. A singular, high-magnitude spike verifies that the temporal relationships match a target reference track perfectly.</p>
+                    <p style="font-size:0.85rem; color:#A0AEC0; margin:0;">Plots the time differences between the query hashes and database hashes. A tall, single spike confirms a matching timeline sequence, identifying the correct song.</p>
                 </div>
             """, unsafe_allow_html=True)
             
@@ -352,7 +351,7 @@ with window[1]:
 
 with window[2]:
     st.markdown("<h3 style='color:#FFF; font-weight:600; margin-bottom:0.2rem;'>Identify Many Clips at Once</h3>", unsafe_allow_html=True)
-    st.markdown("<p class='tab-info-text'>Upload a set of query clips simultaneously. Each is identified against the currently indexed library, and the results are compiled into a standardized <code>results.csv</code> sheet containing the columns <strong>filename</strong> and <strong>prediction</strong>.</p>", unsafe_allow_html=True)
+    st.markdown("<p class='tab-info-text'>Upload multiple query clips at the same time. The application will process each file against our database index and generate a <code>results.csv</code> file matching the evaluation formatting requirement.</p>", unsafe_allow_html=True)
     
     batch_files = st.file_uploader(
         "Upload multiple query clips...", 
