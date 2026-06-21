@@ -267,7 +267,7 @@ with window[1]:
                 if candidates:
                     df_cand = pd.DataFrame(candidates, columns=["Track Title", "Hash Intersection Spike"])
                     df_cand["Track Title"] = df_cand["Track Title"].apply(to_display_name)
-                    st.dataframe(df_cand, use_container_width=True, hide_index=True)
+                    st.dataframe(df_cand, width='stretch', hide_index=True)
             
             st.markdown("<h3 style='color:#FFF; font-weight:600; margin-top:2rem; margin-bottom:1rem;'>⚡ 3-Step Diagnostic Pipeline</h3>", unsafe_allow_html=True)
             
@@ -395,7 +395,7 @@ with window[2]:
                 
                 df_display = df.copy()
                 df_display["prediction"] = df_display["prediction"].apply(to_display_name)
-                st.dataframe(df_display, use_container_width=True, hide_index=True)
+                st.dataframe(df_display, width='stretch', hide_index=True)
                 
                 csv_bytes = df.to_csv(index=False).encode('utf-8')
                 st.download_button(
