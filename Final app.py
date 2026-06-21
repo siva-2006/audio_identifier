@@ -281,7 +281,8 @@ with window[1]:
             
             fig_step1, ax_step1 = plt.subplots(figsize=(12, 4), facecolor='#1A202C')
             ax_step1.set_facecolor('#1A202C')
-            ax_step1.pcolormesh(t, f, Sxx_db, shading='gouraud', cmap='inferno')
+            
+            ax_step1.pcolormesh(t, f, Sxx_db, shading='auto', cmap='inferno')
             
             q_frames = [p[0] for p in peaks]
             q_bins = [p[1] for p in peaks]
