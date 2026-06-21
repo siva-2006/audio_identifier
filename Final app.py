@@ -181,7 +181,7 @@ database_path = "FINGERPRINTS/song_database.pkl"
 database, db_loaded = load_cached_database(database_path)
 
 st.markdown('<h1 class="course-title">EE200 Signals, Systems and Networks</h1>', unsafe_allow_html=True)
-st.markdown('<p class="demo-subtitle">Project Demo | Robust Audio Fingerprinting System</p>', unsafe_allow_html=True)
+st.markdown('<p class="demo-subtitle">Project Demo 🚀 Robust Audio Fingerprinting System</p>', unsafe_allow_html=True)
 st.markdown("""
     <div class="project-description">
         <strong>Project Overview:</strong> This system applies principles of time-frequency analysis to implement an audio identification pipeline. 
@@ -191,7 +191,7 @@ st.markdown("""
     </div>
 """, unsafe_allow_html=True)
 
-window = st.tabs(["| Database Tracks Explorer", "| Live Upload & Identification", "| Automated Batch Mode"])
+window = st.tabs(["📚 Database Tracks Explorer", "🔍 Live Upload & Identification", "🗂️ Automated Batch Mode"])
 
 with window[0]:
     st.markdown("<h3 style='color:#FFF; font-weight:600; margin-bottom:0.2rem;'>Global Database Fingerprint Constellations</h3>", unsafe_allow_html=True)
@@ -216,7 +216,7 @@ with window[0]:
                     with columns[idx]:
                         st.markdown(f"""
                             <div style='background-color:#1A202C; border:1px solid #2D3748; padding:0.5rem 1rem; border-radius:6px; margin-bottom:0.2rem;'>
-                                <span style='font-size:0.9rem; font-weight:600; color:#00F0FF;'>{to_display_name(track_name)}</span>
+                                <span style='font-size:0.9rem; font-weight:600; color:#00F0FF;'>🎵 {to_display_name(track_name)}</span>
                             </div>
                         """, unsafe_allow_html=True)
                         
@@ -257,19 +257,19 @@ with window[1]:
             
             st.markdown(f"""
                 <div class="match-banner">
-                    <span style="font-size:0.85rem; text-transform:uppercase; letter-spacing:0.1rem; color:#90CDF4; font-weight:600;">Match Identified</span>
+                    <span style="font-size:0.85rem; text-transform:uppercase; letter-spacing:0.1rem; color:#90CDF4; font-weight:600;">🎉 Match Identified</span>
                     <h2 style="margin:0.2rem 0; color:#FFFFFF; font-size:2.2rem; font-weight:700;">{to_display_name(matched_song)}</h2>
                     <p style="margin:0; color:#E2E8F0; font-size:0.95rem;">System Confidence Score: <span class="text-cyan">{score} aligned hashes</span></p>
                 </div>
             """, unsafe_allow_html=True)
             
-            with st.expander("System Candidate Rankings List"):
+            with st.expander("📊 System Candidate Rankings List"):
                 if candidates:
                     df_cand = pd.DataFrame(candidates, columns=["Track Title", "Hash Intersection Spike"])
                     df_cand["Track Title"] = df_cand["Track Title"].apply(to_display_name)
                     st.dataframe(df_cand, use_container_width=True, hide_index=True)
             
-            st.markdown("<h3 style='color:#FFF; font-weight:600; margin-top:2rem; margin-bottom:1rem;'>3-Step Diagnostic Pipeline</h3>", unsafe_allow_html=True)
+            st.markdown("<h3 style='color:#FFF; font-weight:600; margin-top:2rem; margin-bottom:1rem;'>⚡ 3-Step Diagnostic Pipeline</h3>", unsafe_allow_html=True)
             
             st.markdown("""
                 <div class="step-card">
@@ -391,7 +391,7 @@ with window[2]:
                 df = pd.DataFrame(results_list, columns=['filename', 'prediction'])
                 df.to_csv("results.csv", index=False)
                 
-                st.success("Batch identification execution complete.")
+                st.success("🏆 Batch identification execution complete.")
                 
                 df_display = df.copy()
                 df_display["prediction"] = df_display["prediction"].apply(to_display_name)
@@ -399,7 +399,7 @@ with window[2]:
                 
                 csv_bytes = df.to_csv(index=False).encode('utf-8')
                 st.download_button(
-                    label="Download results.csv Spreadsheet",
+                    label="💾 Download results.csv Spreadsheet",
                     data=csv_bytes,
                     file_name="results.csv",
                     mime="text/csv"
