@@ -11,7 +11,7 @@ import matplotlib.pyplot as plt
 import re
 
 st.set_page_config(
-    page_title="EE200 Project Demo",
+    page_title="EE200 Project",
     layout="wide"
 )
 
@@ -181,7 +181,7 @@ database_path = "FINGERPRINTS/song_database.pkl"
 database, db_loaded = load_cached_database(database_path)
 
 st.markdown('<h1 class="course-title">EE200 Signals, Systems and Networks</h1>', unsafe_allow_html=True)
-st.markdown('<p class="demo-subtitle">Project Demo 🚀 Robust Audio Fingerprinting System</p>', unsafe_allow_html=True)
+st.markdown('<p class="demo-subtitle">Project Audio Fingerprinting System</p>', unsafe_allow_html=True)
 st.markdown("""
     <div class="project-description">
         <strong>Project Overview:</strong> This project implements an audio identification system similar to Shazam using time-frequency analysis. 
@@ -263,13 +263,13 @@ with window[1]:
                 </div>
             """, unsafe_allow_html=True)
             
-            with st.expander("漏 System Candidate Rankings List"):
+            with st.expander("System Candidate Rankings List"):
                 if candidates:
                     df_cand = pd.DataFrame(candidates, columns=["Track Title", "Hash Intersection Spike"])
                     df_cand["Track Title"] = df_cand["Track Title"].apply(to_display_name)
                     st.dataframe(df_cand, width='stretch', hide_index=True)
             
-            st.markdown("<h3 style='color:#FFF; font-weight:600; margin-top:2rem; margin-bottom:1rem;'>馃毃 3-Step Diagnostic Pipeline</h3>", unsafe_allow_html=True)
+            st.markdown("<h3 style='color:#FFF; font-weight:600; margin-top:2rem; margin-bottom:1rem;'>3-Step Diagnostic Pipeline</h3>", unsafe_allow_html=True)
             
             st.markdown("""
                 <div class="step-card">
